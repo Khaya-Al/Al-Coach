@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Khaya Dlamini | AI Coach and Teacher</title>
+  <meta name="description" content="Khaya Dlamini teaches students, professionals, small businesses and groups how to use AI on their own work. Coaching, workshops and guides.">
+  <meta property="og:title" content="Khaya Dlamini | AI Coach and Teacher">
+  <meta property="og:description" content="Practical AI coaching and workshops, taught by someone who builds with it.">
+  <meta property="og:image" content="khaya.jpg">
+  <meta name="theme-color" content="#0E2A3B">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="index.html">Khaya Dlamini</a>
+  <nav class="links" aria-label="Main">
+    <a class="current" href="index.html" aria-current="page">Home</a>
+    <a href="about.html">About</a>
+    <a href="services.html">Services</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+  <a class="btn btn-small" href="contact.html" data-wa="Hi Khaya, I found your website and I'd like to learn more about AI coaching.">WhatsApp me</a>
+</header>
+
+<main>
+
+  <!-- Scroll scene: laptop morphs into a book -->
+  <section class="scene" id="scene">
+    <div class="stage">
+      <div class="copy">
+        <h1>AI coach and teacher</h1>
+        <div class="captions">
+          <div class="caption" id="capA">
+            <p class="big">I build with AI every day.</p>
+            <p>I study and build projects with these tools, so what I show you is what I actually use, not a list I read about.</p>
+          </div>
+          <div class="caption" id="capB">
+            <p class="big">Then I teach it, plainly.</p>
+            <p>Lessons for students, professionals, small businesses and groups. You learn on your own work, not on demos.</p>
+          </div>
+        </div>
+        <div class="btn-row">
+          <a class="btn" href="services.html">See how I can help</a>
+          <a class="btn btn-ghost" href="about.html">Meet Khaya</a>
+        </div>
+      </div>
+
+      <div class="art">
+        <svg id="morph" viewBox="0 0 600 360" role="img" aria-label="A coding laptop that turns into an open book as you scroll">
+          <defs>
+            <clipPath id="clipShapes">
+              <polygon id="cpScreen" points=""/>
+              <polygon id="cpBase" points=""/>
+            </clipPath>
+          </defs>
+
+          <ellipse cx="300" cy="334" rx="250" ry="10" fill="#0E2A3B" opacity=".12"/>
+
+          <polygon id="cover" points="" fill="#F4B223" stroke="#0E2A3B" stroke-width="6" stroke-linejoin="round"/>
+          <polygon id="base" points="" stroke="#0E2A3B" stroke-width="6" stroke-linejoin="round"/>
+          <polygon id="screen" points="" stroke="#0E2A3B" stroke-width="10" stroke-linejoin="round"/>
+          <line id="spine" x1="300" y1="92" x2="300" y2="300" stroke="#0E2A3B" stroke-width="5" opacity="0"/>
+
+          <g clip-path="url(#clipShapes)">
+            <g id="code" font-family="JetBrains Mono, monospace" font-size="12.5">
+              <text class="ln" x="168" y="74"  fill="#7FD6D7">class Learner:</text>
+              <text class="ln" x="168" y="96"  fill="#C8D6DE">  def __init__(self):</text>
+              <text class="ln" x="168" y="118" fill="#C8D6DE">    self.skills = []</text>
+              <text class="ln" x="168" y="150" fill="#F4B223">class Coach(Learner):</text>
+              <text class="ln" x="168" y="172" fill="#C8D6DE">  def teach(self, ai):</text>
+              <text class="ln" x="168" y="194" fill="#C8D6DE">    return self.skills + ai</text>
+              <text class="ln" x="168" y="226" fill="#7FD6D7">khaya = Coach()</text>
+              <rect class="caret" x="168" y="232" width="8" height="2" fill="#F4B223"/>
+            </g>
+            <g id="pages" opacity="0">
+              <rect x="74" y="118" width="120" height="12" rx="2" fill="#F4B223"/>
+              <rect x="74" y="150" width="190" height="6" rx="3" fill="#0E2A3B" opacity=".25"/>
+              <rect x="74" y="168" width="170" height="6" rx="3" fill="#0E2A3B" opacity=".25"/>
+              <rect x="74" y="186" width="190" height="6" rx="3" fill="#0E2A3B" opacity=".25"/>
+              <rect x="74" y="204" width="140" height="6" rx="3" fill="#0E2A3B" opacity=".25"/>
+              <rect x="74" y="222" width="180" height="6" rx="3" fill="#0E2A3B" opacity=".25"/>
+              <text x="334" y="132" font-family="JetBrains Mono, monospace" font-size="12.5" fill="#0F8B8D">class Coach(Learner):</text>
+              <rect x="334" y="158" width="190" height="6" rx="3" fill="#0E2A3B" opacity=".25"/>
+              <rect x="334" y="176" width="160" height="6" rx="3" fill="#0E2A3B" opacity=".25"/>
+              <rect x="334" y="194" width="190" height="6" rx="3" fill="#0E2A3B" opacity=".25"/>
+              <rect x="334" y="212" width="120" height="6" rx="3" fill="#0E2A3B" opacity=".25"/>
+              <rect x="334" y="230" width="170" height="6" rx="3" fill="#0E2A3B" opacity=".25"/>
+            </g>
+          </g>
+        </svg>
+        <p class="hint" id="hint">Scroll</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Introduction -->
+  <section class="block">
+    <div class="wrap intro">
+      <div class="portrait">
+        <img src="khaya.jpg" alt="Khaya Dlamini in a grey blazer and white shirt" width="900" height="1100">
+      </div>
+      <div>
+        <h2>Hi, I'm Khaya.</h2>
+        <p>I'm an Internet of Things student at the Durban University of Technology. I build projects and websites, and I use AI tools every day for studying, planning and building.</p>
+        <p>I've run a session on using AI for academics and helped other students choose which AI tools fit their projects. Now I teach it properly, in plain language, on your own work.</p>
+        <a class="btn btn-ghost" href="about.html">Read my story</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services summary -->
+  <section class="block alt">
+    <div class="wrap">
+      <h2>Four ways to learn with me</h2>
+      <ul class="mini">
+        <li><h3>Free AI starter pack</h3><span>Your first useful prompts and mistakes to avoid</span></li>
+        <li><h3>Self-study guide</h3><span>Learn at your own pace, with exercises</span></li>
+        <li><h3>Group workshop</h3><span>A live session for your class, society or team</span></li>
+        <li><h3>1-on-1 coaching</h3><span>Private sessions on your own work</span></li>
+      </ul>
+      <a class="btn" href="services.html">See prices and details</a>
+    </div>
+  </section>
+
+  <section class="block cta">
+    <div class="wrap">
+      <h2>Not sure where to start?</h2>
+      <p class="lede">Send me a message and tell me what you're working on. I'll point you to the right option.</p>
+      <div class="btn-row">
+        <a class="btn btn-wa" href="contact.html" data-wa="Hi Khaya, I found your website and I'd like to learn more about AI coaching.">Chat on WhatsApp</a>
+        <a class="btn" href="contact.html" data-mail="AI coaching enquiry">Email me</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot">
+    <p>Khaya Dlamini · AI coach and teacher</p>
+    <nav aria-label="Footer">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
