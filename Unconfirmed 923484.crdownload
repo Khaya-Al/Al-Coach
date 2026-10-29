@@ -1,0 +1,8 @@
+// Your contact details. Change them here and every page updates.
+window.SITE = {
+  // WhatsApp number in international format, digits only (0693268926 becomes 27693268926)
+  whatsapp: "27693268926",
+
+  // Email address. The "Email me" buttons open the visitor's email app addressed to this.
+  email: "khayadlamini352@gmail.com"
+};

@@ -1,0 +1,173 @@
+(function () {
+  var cfg = window.SITE || {};
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var TAU = Math.PI * 2;
+
+  /* ---------- Contact links (every page) ---------- */
+  document.querySelectorAll("[data-wa]").forEach(function (a) {
+    a.href = "https://wa.me/" + cfg.whatsapp + "?text=" + encodeURIComponent(a.getAttribute("data-wa"));
+    a.target = "_blank";
+    a.rel = "noopener";
+  });
+  document.querySelectorAll("[data-mail]").forEach(function (a) {
+    a.href = "mailto:" + cfg.email + "?subject=" + encodeURIComponent(a.getAttribute("data-mail")) +
+      "&body=" + encodeURIComponent("Hi Khaya,\n\n");
+  });
+  document.querySelectorAll("[data-email-text]").forEach(function (el) { el.textContent = cfg.email; });
+
+  /* ---------- Morphing blobs (continuous, time-based) ---------- */
+  var blobs = [].slice.call(document.querySelectorAll(".blob-path"));
+  function blobD(cx, cy, rx, ry, t, ph) {
+    var n = 72, d = "";
+    for (var i = 0; i < n; i++) {
+      var a = (i / n) * TAU;
+      var k = 1 + 0.10 * Math.sin(3 * a + t * 0.0009 + ph) + 0.06 * Math.sin(5 * a - t * 0.0013 + ph * 1.7) + 0.04 * Math.sin(2 * a + t * 0.0007 - ph);
+      d += (i ? "L" : "M") + (cx + Math.cos(a) * rx * k).toFixed(1) + " " + (cy + Math.sin(a) * ry * k).toFixed(1);
+    }
+    return d + "Z";
+  }
+  function drawBlobs(t) {
+    blobs.forEach(function (p) {
+      p.setAttribute("d", blobD(+p.dataset.cx, +p.dataset.cy, +p.dataset.rx, +p.dataset.ry, t, +p.dataset.ph || 0));
+    });
+  }
+
+  /* ---------- Hero shape morph: laptop > book > chat > chip ---------- */
+  var shapeEl = document.getElementById("shape");
+  var N = 140;
+
+  function rounded(cx, cy, r, a0, a1) { // arc points, clockwise in screen space
+    var out = [];
+    for (var i = 0; i <= 6; i++) {
+      var a = a0 + (a1 - a0) * (i / 6);
+      out.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]);
+    }
+    return out;
+  }
+  function chipOutline() {
+    var x0 = 200, x1 = 400, y0 = 80, y1 = 280, w = 11, len = 26, pos = [0.25, 0.5, 0.75], p = [], i, v;
+    p.push([x0, y0]);
+    for (i = 0; i < 3; i++) { v = x0 + (x1 - x0) * pos[i]; p.push([v - w, y0], [v - w, y0 - len], [v + w, y0 - len], [v + w, y0]); }
+    p.push([x1, y0]);
+    for (i = 0; i < 3; i++) { v = y0 + (y1 - y0) * pos[i]; p.push([x1, v - w], [x1 + len, v - w], [x1 + len, v + w], [x1, v + w]); }
+    p.push([x1, y1]);
+    for (i = 2; i >= 0; i--) { v = x0 + (x1 - x0) * pos[i]; p.push([v + w, y1], [v + w, y1 + len], [v - w, y1 + len], [v - w, y1]); }
+    p.push([x0, y1]);
+    for (i = 2; i >= 0; i--) { v = y0 + (y1 - y0) * pos[i]; p.push([x0, v + w], [x0 - len, v + w], [x0 - len, v - w], [x0, v - w]); }
+    return p;
+  }
+  function chatOutline() {
+    var p = [[140, 40], [460, 40]];
+    p = p.concat(rounded(460, 80, 40, -Math.PI / 2, 0));
+    p.push([500, 210]);
+    p = p.concat(rounded(460, 210, 40, 0, Math.PI / 2));
+    p.push([290, 250], [180, 322], [200, 250], [140, 250]);
+    p = p.concat(rounded(140, 210, 40, Math.PI / 2, Math.PI));
+    p.push([100, 80]);
+    p = p.concat(rounded(140, 80, 40, Math.PI, Math.PI * 1.5));
+    return p;
+  }
+
+  var RAW = [
+    [[150, 40], [450, 40], [450, 255], [545, 255], [545, 300], [55, 300], [55, 255], [150, 255]],   // laptop
+    [[40, 70], [300, 96], [560, 70], [560, 290], [300, 316], [40, 290]],                            // book
+    chatOutline(),                                                                                   // chat
+    chipOutline()                                                                                    // chip
+  ];
+
+  function resample(poly, n) {
+    var s = 0, i, j, a, b;
+    for (i = 0; i < poly.length; i++) { a = poly[i]; b = poly[(i + 1) % poly.length]; s += a[0] * b[1] - b[0] * a[1]; }
+    if (s < 0) poly = poly.slice().reverse();                     // make clockwise
+    var cum = [0];
+    for (i = 0; i < poly.length; i++) {
+      a = poly[i]; b = poly[(i + 1) % poly.length];
+      cum.push(cum[i] + Math.hypot(b[0] - a[0], b[1] - a[1]));
+    }
+    var total = cum[cum.length - 1], out = [], seg = 0;
+    for (j = 0; j < n; j++) {
+      var d = (j / n) * total;
+      while (cum[seg + 1] < d) seg++;
+      a = poly[seg]; b = poly[(seg + 1) % poly.length];
+      var f = (d - cum[seg]) / ((cum[seg + 1] - cum[seg]) || 1);
+      out.push([a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f]);
+    }
+    var cx = 0, cy = 0;
+    out.forEach(function (q) { cx += q[0]; cy += q[1]; });
+    cx /= n; cy /= n;
+    var best = 0, bs = -1e9;
+    out.forEach(function (q, k) {                                   // start at the top-left
+      var sc = -(q[0] - cx) - (q[1] - cy);
+      if (sc > bs) { bs = sc; best = k; }
+    });
+    return out.slice(best).concat(out.slice(0, best));
+  }
+
+  var SHAPES = RAW.map(function (r) { return resample(r, N); });
+
+  function ease(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function smooth(x, lo, hi) { var t = Math.min(1, Math.max(0, (x - lo) / (hi - lo))); return t * t * (3 - 2 * t); }
+
+  function pointsFor(a, b, m) {
+    var A = SHAPES[a], B = SHAPES[b], out = new Array(N);
+    for (var i = 0; i < N; i++) {
+      out[i] = (A[i][0] + (B[i][0] - A[i][0]) * m).toFixed(1) + "," + (A[i][1] + (B[i][1] - A[i][1]) * m).toFixed(1);
+    }
+    return out.join(" ");
+  }
+
+  if (shapeEl) {
+    var details = [0, 1, 2, 3].map(function (i) { return document.getElementById("d" + i); });
+    var caps = [0, 1, 2, 3].map(function (i) { return document.getElementById("cap" + i); });
+    var dots = [].slice.call(document.querySelectorAll(".dot-btn"));
+    var HOLD = 2800, MORPH = 1300, CYC = HOLD + MORPH, COUNT = 4;
+    var start = performance.now();
+    var lastCur = -1;
+
+    var render = function (idx, m) {
+      var nxt = (idx + 1) % COUNT;
+      shapeEl.setAttribute("points", pointsFor(idx, nxt, m));
+      for (var i = 0; i < COUNT; i++) {
+        var o = 0;
+        if (i === idx) o = 1 - smooth(m, 0, 0.4);
+        else if (i === nxt) o = smooth(m, 0.6, 1);
+        details[i].setAttribute("opacity", o.toFixed(2));
+        caps[i].style.opacity = o.toFixed(2);
+        caps[i].style.transform = "translateY(" + ((1 - o) * (i === idx ? -10 : 10)).toFixed(1) + "px)";
+        caps[i].style.pointerEvents = o > 0.5 ? "auto" : "none";
+      }
+      var cur = m > 0.5 ? nxt : idx;
+      if (cur !== lastCur) {
+        dots.forEach(function (d, k) { d.setAttribute("aria-current", k === cur ? "true" : "false"); });
+        lastCur = cur;
+      }
+    };
+
+    var jump = function (i) {
+      start = performance.now() - i * CYC;
+      if (reduce) render(i, 0);
+    };
+    dots.forEach(function (d, k) { d.addEventListener("click", function () { jump(k); }); });
+
+    if (reduce) {
+      render(0, 0);
+      drawBlobs(0);
+    } else {
+      var frame = function (ts) {
+        var el = (ts - start) % (CYC * COUNT);
+        if (el < 0) el += CYC * COUNT;
+        var idx = Math.floor(el / CYC), local = el - idx * CYC;
+        render(idx, local < HOLD ? 0 : ease((local - HOLD) / MORPH));
+        drawBlobs(ts);
+        requestAnimationFrame(frame);
+      };
+      requestAnimationFrame(frame);
+    }
+  } else if (blobs.length) {
+    if (reduce) drawBlobs(0);
+    else {
+      var loop = function (ts) { drawBlobs(ts); requestAnimationFrame(loop); };
+      requestAnimationFrame(loop);
+    }
+  }
+})();
